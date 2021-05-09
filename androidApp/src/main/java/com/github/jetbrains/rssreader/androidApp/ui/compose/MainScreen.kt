@@ -15,9 +15,10 @@ import com.github.jetbrains.rssreader.app.FeedStore
 import com.github.terrakok.modo.Modo
 import com.github.terrakok.modo.android.launch
 import com.github.terrakok.modo.forward
-import com.puculek.pulltorefresh.PullToRefresh
-import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
-import dev.chrisbanes.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
 @Composable
@@ -32,8 +33,8 @@ fun MainScreen(
                 (state.value.selectedFeed?.posts ?: state.value.feeds.flatMap { it.posts })
                     .sortedByDescending { it.date }
             }
-            PullToRefresh(
-                isRefreshing = state.value.progress,
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(state.value.progress),
                 onRefresh = { store.dispatch(FeedAction.Refresh(true)) }
             ) {
                 Column {
